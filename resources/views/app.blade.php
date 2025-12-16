@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
+<html
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="h-full" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,7 +45,7 @@
 
     @vite(['resources/js/app.ts'])
 </head>
-<body class="font-sans antialiased">
+<body class="h-full font-sans antialiased">
 <div id="app" class="min-h-screen bg-gray-100"></div>
 </body>
 </html>

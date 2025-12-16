@@ -14,6 +14,14 @@ class Order extends Model
     /** @use HasFactory<OrderFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'symbol',
+        'side',
+        'price',
+        'amount',
+        'status',
+    ];
+
     protected $casts = [
         'price' => 'decimal:8',
         'amount' => 'decimal:8',

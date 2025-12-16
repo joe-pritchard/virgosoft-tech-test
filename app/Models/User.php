@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function canAfford(float $amount): bool
+    {
+        return $this->balance >= $amount;
+    }
 }

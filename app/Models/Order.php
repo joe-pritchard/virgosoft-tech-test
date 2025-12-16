@@ -1,26 +1,25 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\AssetSymbol;
-use Database\Factories\AssetFactory;
+use App\Enums\OrderStatus;
+use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Asset extends Model
+class Order extends Model
 {
-    /** @use HasFactory<AssetFactory> */
+    /** @use HasFactory<OrderFactory> */
     use HasFactory;
 
-    public $timestamps = false;
-
     protected $casts = [
-        'symbol' => AssetSymbol::class,
+        'price' => 'decimal:8',
         'amount' => 'decimal:8',
-        'locked_amount' => 'decimal:8',
+        'status' => OrderStatus::class,
     ];
+
 
     /**
      * @return BelongsTo<User, self>
@@ -28,5 +27,13 @@ class Asset extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return HasOne<Asset, self>
+     */
+    public function asset(): HasOne
+    {
+        return $this->hasOne(Asset::class, 'symbol', 'symbol');
     }
 }

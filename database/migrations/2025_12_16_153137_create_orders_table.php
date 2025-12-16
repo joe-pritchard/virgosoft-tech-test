@@ -11,12 +11,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->references('id')->on('users')->restrictOnDelete();
-            $table->string('symbol')->unique();
-            $table->decimal('amount', 20, 8)->default(0);
-            $table->decimal('locked_amount', 20, 8)->default(0);
+
+            $table->string('symbol');
+            $table->string('side');
+            $table->decimal('price', 20, 8);
+            $table->decimal('amount', 20, 8);
+            $table->unsignedTinyInteger('status')->default(1);
+            $table->timestamps();
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('assets');
+        Schema::dropIfExists('orders');
     }
 };

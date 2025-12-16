@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\User;
+use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin User
+ * @mixin Asset
  */
-class UserResource extends JsonResource
+class AssetResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,10 +20,8 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->name,
-            'email' => $this->email,
-            'balance' => $this->balance,
-            'assets' => $this->whenLoaded('assets', fn () => AssetResource::collection($this->assets)),
+            'symbol' => $this->symbol,
+            'amount' => $this->amount,
         ];
     }
 }

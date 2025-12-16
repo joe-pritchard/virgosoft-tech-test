@@ -10,6 +10,6 @@ class ProfileController extends Controller
 {
     public function __invoke(Request $request): UserResource
     {
-        return UserResource::make($request->user());
+        return UserResource::make($request->user()->load('assets'));
     }
 }

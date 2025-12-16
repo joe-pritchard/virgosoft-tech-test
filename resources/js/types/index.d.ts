@@ -1,14 +1,16 @@
-export interface Auth {
-    user: User;
+export enum AssetSymbol {
+    BTC = 'BTC',
+    ETH = 'ETH',
+}
+
+export interface Asset {
+    symbol: AssetSymbol
+    amount: number
 }
 
 export interface User {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
+    name: string
+    email: string
+    assets: Asset[]
+    balance: number
 }
-

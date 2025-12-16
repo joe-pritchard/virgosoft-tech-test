@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Alert from '@/components/Alert.vue'
+import Card from '@/components/Card.vue'
+import FormInput from '@/components/FormInput.vue'
 import { useAuthStore } from '@/stores/auth'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -50,14 +52,13 @@ watch(
             </h2>
         </div>
 
-        <div
-            class="mx-auto mt-4 min-w-md rounded-md border border-blue-700 bg-white p-6 shadow"
-        >
+        <Card>
             <Alert
                 v-if="errorMessage !== null"
                 title="Unable to log you in"
                 :messages="[errorMessage]"
             />
+
             <form
                 class="space-y-6"
                 action="/login"
@@ -67,43 +68,25 @@ watch(
                 @input="errorMessage = null"
             >
                 <fieldset :disabled="isLoggingIn">
-                    <label
-                        for="email"
-                        class="block text-sm/6 font-medium text-gray-900"
-                    >
-                        Email address
-                    </label>
-                    <div class="mt-2">
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            autocomplete="email"
-                            required
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                            v-model="email"
-                        />
-                    </div>
+                    <FormInput
+                        label="Email address"
+                        type="email"
+                        name="email"
+                        autocomplete="email"
+                        v-model="email"
+                        required
+                    />
                 </fieldset>
 
                 <fieldset :disabled="isLoggingIn">
-                    <label
-                        for="password"
-                        class="block text-sm/6 font-medium text-gray-900"
-                    >
-                        Password
-                    </label>
-                    <div class="mt-2">
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            autocomplete="current-password"
-                            required
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                            v-model="password"
-                        />
-                    </div>
+                    <FormInput
+                        label="Password"
+                        type="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                        v-model="password"
+                    />
                 </fieldset>
 
                 <div>
@@ -116,6 +99,6 @@ watch(
                     </button>
                 </div>
             </form>
-        </div>
+        </Card>
     </div>
 </template>

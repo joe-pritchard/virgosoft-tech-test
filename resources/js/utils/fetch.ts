@@ -1,3 +1,5 @@
+import { useCookies } from '@vueuse/integrations/useCookies'
+
 const ensureStartsWithHost = (url: string): string => {
     if (url.startsWith('https://')) {
         return url
@@ -16,27 +18,35 @@ export async function fetchJson<T extends object>(
     const finalOptions = {
         method,
         headers: {
+            'Access-Control-Allow-Credentials': 'True',
             Accept: 'application/json',
-            'X-CSRF-TOKEN': (
-                document.querySelector(
-                    'meta[name="csrf-token"]',
-                ) as HTMLMetaElement
-            ).content,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json',
         },
         ...options,
     }
 
     if (body !== undefined) {
-        options.body = JSON.stringify(body)
+        finalOptions.body = JSON.stringify(body)
+    }
+
+    const xsrfCookie = useCookies().get('XSRF-TOKEN')
+    if (xsrfCookie) {
+        finalOptions.headers = {
+            ...finalOptions.headers,
+            'X-XSRF-TOKEN': xsrfCookie,
+        }
     }
 
     const response = await fetch(ensureStartsWithHost(url), finalOptions)
 
     if (!response.ok) {
-        throw new Error(
-            `Fetch error: ${response.status} ${response.statusText}`,
+        const json = await response.json()
+        throw (
+            json ??
+            new Error(`Fetch error: ${response.status} ${response.statusText}`)
         )
     }
 
-    return response.json()
+    return response.json().catch(() => response.body)
 }

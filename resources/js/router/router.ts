@@ -1,3 +1,5 @@
+import { useAuthStore } from '@/stores/auth'
+import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -6,14 +8,35 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/login',
+            name: 'Dashboard',
+            component: Home,
         },
         {
             component: Login,
-            name: 'Login',
             path: '/login',
         },
     ],
 })
+
+const redirectIfNotLoggedIn = (to: any, from: any, next: any) => {
+    const { isLoggedIn } = useAuthStore()
+    if (!isLoggedIn && to.path !== '/login') {
+        return next('/login')
+    }
+
+    next()
+}
+
+const redirectIfLoggedIn = (to: any, from: any, next: any) => {
+    const { isLoggedIn } = useAuthStore()
+    if (isLoggedIn && to.path === '/login') {
+        return next('/')
+    }
+    
+    next()
+}
+
+router.beforeEach(redirectIfNotLoggedIn)
+router.beforeEach(redirectIfLoggedIn)
 
 export default router

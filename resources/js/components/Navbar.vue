@@ -3,10 +3,10 @@ import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const { isLoggedIn, logout } = useAuthStore()
+const auth = useAuthStore()
 
 const onLogout = async () => {
-    await logout()
+    await auth.logout()
     router.push('/login')
 }
 </script>
@@ -24,7 +24,7 @@ const onLogout = async () => {
                         />
                     </div>
                 </div>
-                <button v-if="isLoggedIn" @click="onLogout">Logout</button>
+                <button v-if="auth.isLoggedIn" @click="onLogout">Logout</button>
             </div>
         </div>
     </nav>

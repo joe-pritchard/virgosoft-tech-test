@@ -50,13 +50,13 @@ it('can place a sell order', function () {
             'amount' => 5,
             'locked_amount' => 0,
         ]))
-        ->create(['balance' => 1000]);
+        ->create();
 
     $this->actingAs($user)
         ->postJson(route('order.store'),
             ['symbol' => AssetSymbol::ETH, 'amount' => 1, 'side' => 'sell', 'price' => 3000])
         ->assertCreated()
-        ->assertJsonStructure(['id', 'status']);
+        ->assertJsonFragment(['status' => OrderStatus::OPEN, 'symbol' => AssetSymbol::ETH]);
 
     $this->assertDatabaseHas('orders', [
         'user_id' => $user->id,
@@ -64,16 +64,48 @@ it('can place a sell order', function () {
         'amount' => 1,
         'side' => 'sell',
         'price' => 3000,
-        'status' => 'open', // todo: use enum
+        'status' => OrderStatus::OPEN,
     ]);
 
     $asset = $user->assets()->whereSymbol(AssetSymbol::ETH)->first();
-    expect($user->balance)->toBe(1000)
-        ->and($asset->amount)
-        ->toBe(4)
+    expect($asset->amount)
+        ->toBe('4.00000000')
         ->and($asset->locked_amount)
-        ->toBe(1);
-})->skip();
+        ->toBe('1.00000000');
+});
+
+it('refuses to place a sell order if the user does not hold the asset', function () {
+    $user = User::factory()->create(['balance' => 1000]);
+
+    $this->actingAs($user)
+        ->postJson(route('order.store'),
+            ['symbol' => AssetSymbol::ETH, 'amount' => 1, 'side' => 'sell', 'price' => 3000])
+        ->assertNotFound();
+
+    $this->assertDatabaseCount('orders', 0);
+});
+
+it('refuses to place a sell order if the user holds the asset but not enough', function () {
+    $user = User::factory()
+        ->has(Asset::factory()->state([
+            'symbol' => AssetSymbol::ETH,
+            'amount' => 5.0,
+            'locked_amount' => 0.0,
+        ]))
+        ->create(['balance' => 1000.0]);
+
+    $this->actingAs($user)
+        ->postJson(route('order.store'),
+            ['symbol' => AssetSymbol::ETH, 'amount' => 6, 'side' => 'sell', 'price' => 3000])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['amount' => 'Insufficient asset amount to place sell order']);
+
+    $asset = $user->assets()->whereSymbol(AssetSymbol::ETH)->first();
+    expect($asset->amount)->toBe('5.00000000')
+        ->and($asset->locked_amount)->toBe('0.00000000');
+
+    $this->assertDatabaseCount('orders', 0);
+});
 
 it('validates the order input', function () {
     $user = User::factory()->create(['balance' => 10000]);

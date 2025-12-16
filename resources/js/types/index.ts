@@ -6,6 +6,12 @@ export enum AssetSymbol {
     BCH = 'BCH',
 }
 
+export enum OrderStatus {
+    OPEN,
+    FILLED,
+    CANCELLED,
+}
+
 export interface Asset {
     symbol: AssetSymbol
     amount: number
@@ -16,4 +22,15 @@ export interface User {
     email: string
     assets: Asset[]
     balance: number
+}
+
+export interface Order {
+    user_id: number
+    symbol: AssetSymbol
+    amount: number
+    price: number
+    side: 'buy' | 'sell'
+    status: OrderStatus
+    created_at: string
+    updated_at: string
 }

@@ -7,5 +7,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', ProfileController::class);
-    Route::apiResource('order', OrderController::class)->only(['store', 'destroy']);
+    Route::apiResource('order', OrderController::class)->only(['index', 'store', 'destroy']);
 });

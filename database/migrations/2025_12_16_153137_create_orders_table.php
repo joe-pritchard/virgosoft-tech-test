@@ -17,7 +17,7 @@ return new class extends Migration {
 
             $table->string('symbol');
             $table->string('side');
-            $table->decimal('price', 20, 8);
+            $table->decimal('price', 20, 2);
             $table->decimal('amount', 20, 8);
             $table->unsignedTinyInteger('status')->default(1);
             $table->timestamps();

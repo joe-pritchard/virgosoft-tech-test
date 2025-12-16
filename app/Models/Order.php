@@ -23,7 +23,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:8',
+        'price' => 'decimal:2',
         'amount' => 'decimal:8',
         'status' => OrderStatus::class,
     ];

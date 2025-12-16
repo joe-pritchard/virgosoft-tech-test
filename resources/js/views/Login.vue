@@ -90,7 +90,11 @@ watch(
                     />
                 </fieldset>
 
-                <FormButton :disabled="isLoggingIn" type="submit">
+                <FormButton
+                    :disabled="isLoggingIn"
+                    type="submit"
+                    class="w-full"
+                >
                     Sign in
                 </FormButton>
             </form>

@@ -1,6 +1,9 @@
 export enum AssetSymbol {
     BTC = 'BTC',
     ETH = 'ETH',
+    XRP = 'XRP',
+    LTC = 'LTC',
+    BCH = 'BCH',
 }
 
 export interface Asset {

@@ -14,7 +14,7 @@ export async function fetchJson<T extends object>(
     method: 'POST' | 'GET' | 'PUT',
     body?: object,
     options?: RequestInit,
-): Promise<T> {
+): Promise<{ data: T }> {
     const finalOptions = {
         method,
         headers: {

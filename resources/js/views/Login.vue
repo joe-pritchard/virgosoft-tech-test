@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Alert from '@/components/Alert.vue'
 import Card from '@/components/Card.vue'
+import FormButton from '@/components/FormButton.vue'
 import FormInput from '@/components/FormInput.vue'
 import { useAuthStore } from '@/stores/auth'
 import { ref, watch } from 'vue'
@@ -89,15 +90,9 @@ watch(
                     />
                 </fieldset>
 
-                <div>
-                    <button
-                        :disabled="isLoggingIn"
-                        type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        Sign in
-                    </button>
-                </div>
+                <FormButton :disabled="isLoggingIn" type="submit">
+                    Sign in
+                </FormButton>
             </form>
         </Card>
     </div>

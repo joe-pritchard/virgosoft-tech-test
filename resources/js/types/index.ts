@@ -15,6 +15,7 @@ export enum OrderStatus {
 export interface Asset {
     symbol: AssetSymbol
     amount: number
+    locked_amount: number
 }
 
 export interface User {

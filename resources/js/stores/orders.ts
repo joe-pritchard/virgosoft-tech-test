@@ -1,9 +1,11 @@
+import { useAuthStore } from '@/stores/auth'
 import { Order } from '@/types'
 import { fetchJson } from '@/utils/fetch'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useOrdersStore = defineStore('orders', () => {
+    const authStore = useAuthStore()
     const creating = ref(false)
     const cancelling = ref(false)
     const loading = ref(false)
@@ -34,12 +36,14 @@ export const useOrdersStore = defineStore('orders', () => {
         ).finally(() => (creating.value = false))
 
         orders.value.push(response.data)
+        return authStore.fetchUser()
     }
 
     const patchOrder = async (order: Order) => {
         const orderIndex = orders.value.findIndex((o) => o.id === order.id)
         if (orderIndex > -1) {
             orders.value = orders.value.toSpliced(orderIndex, 1, order)
+            await authStore.fetchUser()
         }
     }
 

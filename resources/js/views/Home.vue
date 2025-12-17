@@ -4,6 +4,7 @@ import FormButton from '@/components/FormButton.vue'
 import Modal from '@/components/Modal.vue'
 import OrderForm from '@/components/OrderForm.vue'
 import OrderTable from '@/components/OrderTable.vue'
+import Wallet from '@/components/Wallet.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useOrdersStore } from '@/stores/orders'
 import { Order } from '@/types'
@@ -56,11 +57,14 @@ watch(
 
 <template>
     <Card class="w-full">
+        <Wallet />
+    </Card>
+
+    <Card class="mt-6 w-full">
         <Modal :open="isOrderFormOpen" @close="isOrderFormOpen = false">
             <template #header>Place order</template>
             <OrderForm @close="isOrderFormOpen = false" />
         </Modal>
-
         <div v-if="orderStore.loading" class="text-center">
             <h3 class="mt-2 text-sm font-semibold text-gray-900">
                 Loading orders...
@@ -88,6 +92,7 @@ watch(
                 </FormButton>
             </div>
         </div>
+
         <OrderTable
             v-else
             :orders="orderStore.orders"

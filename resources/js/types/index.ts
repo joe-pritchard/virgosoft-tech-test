@@ -7,9 +7,9 @@ export enum AssetSymbol {
 }
 
 export enum OrderStatus {
-    OPEN,
-    FILLED,
-    CANCELLED,
+    OPEN = 1,
+    FILLED = 2,
+    CANCELLED = 3,
 }
 
 export interface Asset {

@@ -8,17 +8,21 @@ use App\Actions\CreateBuyOrder;
 use App\Actions\CreateSellOrder;
 use App\Http\Requests\OrderCancelRequest;
 use App\Http\Requests\OrderCreateRequest;
+use App\Http\Requests\OrderIndexRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class OrderController extends Controller
 {
 
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(OrderIndexRequest $request): AnonymousResourceCollection
     {
-        return OrderResource::collection($request->user()->orders);
+        $orders = $request->user()->orders()
+            ->when($request->has('symbol'), fn ($query) => $query->where('symbol', $request->input('symbol')))
+            ->get();
+
+        return OrderResource::collection($orders);
     }
 
     /**

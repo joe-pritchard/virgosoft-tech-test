@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FormButton from '@/components/FormButton.vue'
+import OrderTableRow from '@/components/OrderTableRow.vue'
 import { Order } from '@/types'
 import { PropType } from 'vue'
 
@@ -69,6 +70,7 @@ defineProps({
                         <OrderTableRow
                             v-for="order in orders"
                             :key="order.id"
+                            :order="order"
                         />
                     </tbody>
                 </table>

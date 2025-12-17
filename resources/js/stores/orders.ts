@@ -9,11 +9,17 @@ export const useOrdersStore = defineStore('orders', () => {
     const loading = ref(false)
     const orders = ref<Order[]>([])
 
-    const fetchOrders = async () => {
+    const fetchOrders = async (symbol?: string) => {
         loading.value = true
-        const response = await fetchJson<Order[]>('/api/order', 'GET').finally(
-            () => (loading.value = false),
-        )
+        const search = new URLSearchParams()
+        if (symbol) {
+            search.append('symbol', symbol)
+        }
+
+        const response = await fetchJson<Order[]>(
+            `/api/orders?${search.toString()}`,
+            'GET',
+        ).finally(() => (loading.value = false))
 
         orders.value = response.data
     }
@@ -22,7 +28,7 @@ export const useOrdersStore = defineStore('orders', () => {
         creating.value = true
 
         const response = await fetchJson<Order>(
-            '/api/order',
+            '/api/orders',
             'POST',
             orderData,
         ).finally(() => (creating.value = false))
@@ -41,7 +47,7 @@ export const useOrdersStore = defineStore('orders', () => {
         cancelling.value = true
 
         const response = await fetchJson<Order>(
-            `/api/order/${id}/cancel`,
+            `/api/orders/${id}/cancel`,
             'POST',
         ).finally(() => (cancelling.value = false))
 

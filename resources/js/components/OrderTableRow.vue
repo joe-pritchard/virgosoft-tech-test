@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useOrdersStore } from '@/stores/orders'
-import { Order } from '@/types'
+import { Order, OrderStatus } from '@/types'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDate } from '@/utils/formatDate'
 import { PropType } from 'vue'
@@ -28,12 +28,13 @@ const orderStore = useOrdersStore()
             {{ order.amount }}
         </td>
         <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-            {{ order.status }}
+            {{ OrderStatus[order.status] }}
         </td>
         <td
             class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0"
         >
             <button
+                v-if="order.status !== OrderStatus.CANCELLED"
                 class="cursor-pointer text-red-600 hover:text-red-900"
                 :disabled="orderStore.cancelling"
                 @click.prevent="() => orderStore.cancelOrder(order.id)"

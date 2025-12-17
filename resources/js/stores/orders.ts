@@ -5,6 +5,7 @@ import { ref } from 'vue'
 
 export const useOrdersStore = defineStore('orders', () => {
     const creating = ref(false)
+    const cancelling = ref(false)
     const loading = ref(false)
     const orders = ref<Order[]>([])
 
@@ -37,18 +38,19 @@ export const useOrdersStore = defineStore('orders', () => {
     }
 
     const cancelOrder = async (id: number) => {
-        creating.value = true
+        cancelling.value = true
 
         const response = await fetchJson<Order>(
-            `/api/order/${id}`,
-            'DELETE',
-        ).finally(() => (creating.value = false))
+            `/api/order/${id}/cancel`,
+            'POST',
+        ).finally(() => (cancelling.value = false))
 
-        orders.value.push(response.data)
+        return patchOrder(response.data)
     }
 
     return {
         creating,
+        cancelling,
         loading,
         orders,
         fetchOrders,

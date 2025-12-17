@@ -20,7 +20,7 @@ const isOrderFormOpen = ref(false)
 const orderStore = useOrdersStore()
 const { user } = storeToRefs(useAuthStore())
 
-const onCancel = async (orderId: string) => {
+const onCancel = async (orderId: number) => {
     await orderStore.cancelOrder(orderId)
 }
 

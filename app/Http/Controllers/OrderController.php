@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\CancelOrder;
 use App\Actions\CreateBuyOrder;
 use App\Actions\CreateSellOrder;
+use App\Http\Requests\OrderCancelRequest;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -42,8 +44,8 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function cancel(OrderCancelRequest $_request, Order $order, CancelOrder $cancelOrder): OrderResource
     {
-        //
+        return OrderResource::make($cancelOrder->handle($order));
     }
 }

@@ -95,3 +95,8 @@ Otherwise you will need to do the initial composer install via docker:
 ### Access the application
 
 Open your web browser and navigate to [http://localhost]() or [http://app.test]() to access the application.
+
+Your credentials should be prefilled with the email address `test1@example.com` and the password `secret`.
+
+There is a second user available with the email address `test2@example.com` and the same password should you need to
+test order matching and concurrency.

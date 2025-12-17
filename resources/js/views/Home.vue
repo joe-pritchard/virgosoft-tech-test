@@ -4,20 +4,54 @@ import FormButton from '@/components/FormButton.vue'
 import Modal from '@/components/Modal.vue'
 import OrderForm from '@/components/OrderForm.vue'
 import OrderTable from '@/components/OrderTable.vue'
+import { useAuthStore } from '@/stores/auth'
 import { useOrdersStore } from '@/stores/orders'
+import { Order } from '@/types'
 import { PlusIcon } from '@heroicons/vue/20/solid'
-import { onMounted, ref } from 'vue'
+import { useEcho } from '@laravel/echo-vue'
+import { storeToRefs } from 'pinia'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+
+interface OrderMatchedEvent {
+    order: Order
+}
 
 const isOrderFormOpen = ref(false)
 const orderStore = useOrdersStore()
+const { user } = storeToRefs(useAuthStore())
 
 const onCancel = async (orderId: string) => {
     await orderStore.cancelOrder(orderId)
 }
 
+let leaveChannel: (() => void) | null = null
 onMounted(() => {
     orderStore.fetchOrders()
 })
+
+onUnmounted(() => {
+    if (leaveChannel) {
+        leaveChannel()
+    }
+})
+
+watch(
+    user,
+    () => {
+        if (!user.value) return
+
+        const { leave } = useEcho(
+            `user.${user.value.id}`,
+            'App.Events.OrderMatched',
+            (event: OrderMatchedEvent) => {
+                orderStore.patchOrder(event.order)
+            },
+        )
+
+        leaveChannel = leave
+    },
+    { immediate: true },
+)
 </script>
 
 <template>

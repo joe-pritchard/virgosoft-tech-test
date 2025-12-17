@@ -18,6 +18,7 @@ export interface Asset {
 }
 
 export interface User {
+    id: number
     name: string
     email: string
     assets: Asset[]
@@ -25,6 +26,7 @@ export interface User {
 }
 
 export interface Order {
+    id: number
     user_id: number
     symbol: AssetSymbol
     amount: number

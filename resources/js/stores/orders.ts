@@ -29,9 +29,31 @@ export const useOrdersStore = defineStore('orders', () => {
         orders.value.push(response.data)
     }
 
-    const cancelOrder = async (orderId: number) => {
-        // todo
+    const patchOrder = async (order: Order) => {
+        const orderIndex = orders.value.findIndex((o) => o.id === order.id)
+        if (orderIndex > -1) {
+            orders.value = orders.value.toSpliced(orderIndex, 1, order)
+        }
     }
 
-    return { creating, loading, orders, fetchOrders, placeOrder }
+    const cancelOrder = async (id: number) => {
+        creating.value = true
+
+        const response = await fetchJson<Order>(
+            `/api/order/${id}`,
+            'DELETE',
+        ).finally(() => (creating.value = false))
+
+        orders.value.push(response.data)
+    }
+
+    return {
+        creating,
+        loading,
+        orders,
+        fetchOrders,
+        placeOrder,
+        patchOrder,
+        cancelOrder,
+    }
 })

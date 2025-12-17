@@ -62,6 +62,7 @@ class MatchOrder
                 $matchedOrder->update(['status' => OrderStatus::FILLED]);
 
                 OrderMatched::dispatch($order->refresh());
+                OrderMatched::dispatch($matchedOrder->refresh());
             }
         });
     }
@@ -69,7 +70,7 @@ class MatchOrder
     private function findMatchForBuyOrder(Order $order): ?Order
     {
         return Order::query()
-            ->whereDoesntBelongTo($order->user)
+            ->where('user_id', '!=', $order->user_id)
             ->where('symbol', $order->symbol)
             ->where('side', 'sell')
             ->where('price', '<=', $order->price)
@@ -84,7 +85,7 @@ class MatchOrder
     private function findMatchForSellOrder(Order $order): ?Order
     {
         return Order::query()
-            ->whereDoesntBelongTo($order->user)
+            ->where('user_id', '!=', $order->user_id)
             ->where('symbol', $order->symbol)
             ->where('side', 'buy')
             ->where('price', '>=', $order->price)

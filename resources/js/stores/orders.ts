@@ -1,8 +1,13 @@
 import { useAuthStore } from '@/stores/auth'
-import { Order } from '@/types'
+import { AssetSymbol, Order } from '@/types'
 import { fetchJson } from '@/utils/fetch'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+
+interface FetchOrderOptions {
+    symbol?: AssetSymbol
+    userId?: number
+}
 
 export const useOrdersStore = defineStore('orders', () => {
     const authStore = useAuthStore()
@@ -11,11 +16,15 @@ export const useOrdersStore = defineStore('orders', () => {
     const loading = ref(false)
     const orders = ref<Order[]>([])
 
-    const fetchOrders = async (symbol?: string) => {
+    const fetchOrders = async (options: FetchOrderOptions) => {
         loading.value = true
         const search = new URLSearchParams()
-        if (symbol) {
-            search.append('symbol', symbol)
+        if (options.symbol) {
+            search.append('symbol', options.symbol)
+        }
+
+        if (options.userId) {
+            search.append('user', options.userId)
         }
 
         const response = await fetchJson<Order[]>(

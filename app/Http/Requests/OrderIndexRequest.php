@@ -26,6 +26,7 @@ class OrderIndexRequest extends FormRequest
     {
         return [
             'symbol' => ['sometimes', Rule::enum(AssetSymbol::class)],
+            'user' => ['sometimes', 'exists:users,id'],
         ];
     }
 }

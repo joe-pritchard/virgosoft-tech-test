@@ -53,7 +53,7 @@ watch(
             </h2>
         </div>
 
-        <Card>
+        <Card class="min-w-md">
             <Alert
                 v-if="errorMessage !== null"
                 title="Unable to log you in"

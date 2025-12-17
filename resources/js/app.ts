@@ -1,3 +1,8 @@
+import { configureEcho } from '@laravel/echo-vue';
+
+configureEcho({
+    broadcaster: 'reverb',
+});
 import '../css/app.css'
 
 import App from '@/App.vue'

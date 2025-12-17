@@ -7,6 +7,8 @@ const { user } = storeToRefs(useAuthStore())
 </script>
 
 <template>
+    <h1 class="text-base font-semibold text-gray-900">Your Wallet</h1>
+
     <div class="mt-8 flow-root">
         <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div
